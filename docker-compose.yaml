@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:13
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_service
+      APP_DB_USER: docker
+      APP_DB_PASS: docker
+#    networks:
+#      - ompnw
+    volumes:
+      # - pgdata:/var/lib/postgresql/data
+      - ./scripts/init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
+
+#  task-service:
+#    container_name: task-service
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    restart: unless-stopped
+#    networks:
+#      - ompnw
+#    depends_on:
+#      - postgres
+#    links:
+#      - postgres
+#    ports:
+#      - 8083:8080 # REST
+##    healthcheck:
+##      test: [ 'CMD', 'curl', '-v', 'http://localhost:8000/live' ]
+##      interval: 10s
+##      timeout: 10s
+##      retries: 2
+##      start_period: 20s
+#    volumes:
+#      - ./migrations:/root/migrations
+#      - ./config.yml:/root/config.yml
+#
+#volumes:
+#  pgdata:
+#    driver: local
+#
+#networks:
+#  ompnw:
+#    driver: bridge

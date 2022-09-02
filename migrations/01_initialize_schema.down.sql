@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS tasks;
+
+DROP TABLE IF EXISTS signatories;
+
+DROP TYPE IF EXISTS status_task;
